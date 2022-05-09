@@ -1,3 +1,8 @@
+# This file is part of Caravan project/dataset. See https://github.com/kratzert/Caravan for details.
+#
+# You should have received a copy of the BSD-3-Clause license along with this file. If not,
+# see https://opensource.org/licenses/BSD-3-Clause.
+
 from datetime import datetime
 from functools import partial
 from multiprocessing import Pool
