@@ -1,0 +1,14 @@
+name: caravan
+channels:
+  - defaults
+dependencies:
+  - jupyter
+  - netcdf4
+  - numba
+  - pandas
+  - pip
+  - python=3.7
+  - tqdm
+  - xarray
+  - pip:
+    - timezonefinder[numba]

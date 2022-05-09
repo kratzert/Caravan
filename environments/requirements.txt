@@ -1,0 +1,7 @@
+jupyter
+netcdf4
+numba
+pandas
+tqdm
+xarray
+timezonefinder[numba]
