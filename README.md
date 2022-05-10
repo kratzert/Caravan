@@ -14,12 +14,12 @@ The Caravan dataset that was released together with the [paper]() can be found [
 
 The purpose of this repository is twofold:
 
-    1. It contains the code that was 
-        a) used to derive all of the data included in Caravan and 
-        b) that is required to extend Caravan to any new location for free in the cloud.
-    2. It acts as a community hub (see [discussion forum](https://github.com/kratzert/caravan/discussions)) to
-        a) share news and updates on Caravan ),
-        b) for anyone to share extensions of Caravan to new regions.
+1. It contains the code  
+    - that was used to derive all of the data included in Caravan, and 
+    - that is required to extend Caravan to any new location for free in the cloud.
+2. It acts as a community hub (see [discussion forum](https://github.com/kratzert/caravan/discussions)) to
+    - share news and updates on Caravan ),
+    - for anyone to share extensions of Caravan to new regions.
 
 See ["Extend Caravan"]() for a detailed description about how to extend Caravan to any new region/basin with the code provided in this repository. See ["How to contribute"](#how-to-contribute) for more details about how to contribute to the Caravan project.
 
@@ -27,9 +27,9 @@ See ["Extend Caravan"]() for a detailed description about how to extend Caravan 
 
 Our main vision with Caravan is that this dataset will grow over time. Anyone, with as little as streamflow records and catchment boundaries of one (or more) basins, can contribute to extending the Caravan dataset to new regions. The code provided in this dataset can be used to:
 
-    a) Compute static catchment attributes on Google Earth Engine.
-    b) Compute time series of spatially-averaged meteorological forcings on Google Earth Engine.
-    c) Postprocess the Earth Engine outputs locally and to combine it with streamflow, as well as to compute some additional climate indices.
+1. Compute static catchment attributes on Google Earth Engine.
+2. Compute time series of spatially-averaged meteorological forcings on Google Earth Engine.
+3. Postprocess the Earth Engine outputs locally and to combine it with streamflow, as well as to compute some additional climate indices.
 
 The generated output is already in a folder structure that can be easily integrated into the existing dataset. Additionally, every data that is contributed contains a separate license/info file, attributing your contribution to this project and explaining the source of license specification of this addition. Follow [this guide]() for more information on how to share your data with the community.
 
