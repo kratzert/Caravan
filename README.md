@@ -1,6 +1,6 @@
 ![](caravan-long-logo.png)
 
-# Caravan - A global comunity dataset for large-sample hydrology
+# Caravan - A global community dataset for large-sample hydrology
 
 This repository is part of the Caravan project/dataset.
 
