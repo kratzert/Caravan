@@ -1,0 +1,77 @@
+name: Data contribution
+description: Contribute data to Caravan
+title: '[DATA CONTRIBUTION] Title describing the contributed data'
+labels: ['data-contribution']
+assignees: ''
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for contributing data to Caravan! Please fill out the following information so we can be sure your contribution is ready to be featured in the [list of community-contributed data](TODO). Once your dataset is accepted, a Caravan maintainer will add it to the list of datasets in the [Data Contributions discussion thread](TODO) and close this issue.
+  - type: input
+    id: prefix
+    attributes:
+      label: Basin prefix
+      description: Which basin prefix did you choose for your dataset?
+      placeholder: ex. camelsgb
+    validations:
+      required: true
+  - type: input
+    id: doi
+    attributes:
+      label: Zenodo DOI
+      description: Please provide the Zenodo DOI link to your data.
+      placeholder: ex. https://zenodo.org/records/12345
+    validations:
+      required: true
+  - type: input
+    id: num_basins
+    attributes:
+      label: Number of catchments
+      description: How many catchments are you contributing?
+    validations:
+      required: true
+  - type: input
+    id: location
+    attributes:
+      label: Location of catchments
+      description: Where in the world are your catchments located?
+    validations:
+      required: true
+  - type: textarea
+    id: periods
+    attributes:
+      label: For which periods are streamflow records available in your dataset?
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: Please list any sources of the data you contributed.
+    validations:
+      required: true
+  - type: input
+    id: license
+    attributes:
+      label: License
+      description: Under what license is your data available?
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Add any other context, figures, links, or statistics about your contributed data here. 
+  - type: checkboxes
+    id: checklist
+    # not making these required on purpose, so people can submit the issue even when one or two boxes are not yet ticked.
+    attributes:
+      label: Checklist
+      description: Please make sure you can check all items on this checklist
+      options:
+        - label: I have uploaded my dataset on Zenodo, where it is accessible under the DOI provided above.
+          required: false
+        - label: I used a basin prefix that is not yet used by any other Caravan sub-dataset (you can check this via the Data Contributions discussion thread (TODO link), where all accepted Caravan contributions are listed).
+          required: false
+        - label: 'Permissive License: My data is available under a license that is compatible with the Caravan CC-BY-4.0 license (the easiest way to be sure about this is if your data uses CC-BY-4.0, too).'
+          required: false
