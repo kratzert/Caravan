@@ -40,7 +40,7 @@ The Caravan dataset (and the corresponding manuscript) are currently under revis
 ```
 @article{kratzert2022caravan,
   title={Caravan - A global community dataset for large-sample hydrology},
-  author={Kratzert, Frederik and Nearing, Grey and Addor, Nans and Erickson, Tyler and Gauch, Martin and Gilon, Oren and Gudmundsson, Lukas and Klotz, Daniel and Nevo, Sella and Shalev, Guy and Matias, Yossi},
+  author={Kratzert, Frederik and Nearing, Grey and Addor, Nans and Erickson, Tyler and Gauch, Martin and Gilon, Oren and Gudmundsson, Lukas and Hassidim, Avinatan and Klotz, Daniel and Nevo, Sella and Shalev, Guy and Matias, Yossi},
   journal={Scientific Data},
   year={submitted},
   publisher={Nature Publishing Group}
