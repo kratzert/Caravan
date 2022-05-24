@@ -8,7 +8,7 @@ This repository is part of the Caravan project/dataset.
 
 _Caravan_ is an open community dataset of meteorological forcing data, catchment attributes, and discharge data for catchments around the world. Additionally, Caravan provides code to derive meteorological forcing data and catchment attributes in the cloud, making it easy for anyone to extend Caravan to new catchments. The vision of Caravan is to provide the foundation for a truly global open source community resource that will grow over time. 
 
-The Caravan dataset that was released together with the [paper](https://eartharxiv.org/repository/view/3345/) can be found [here](https://doi.org/10.5281/zenodo.6573527).
+The Caravan dataset that was released together with the [paper](https://eartharxiv.org/repository/view/3345/) can be found [here](https://doi.org/10.5281/zenodo.6578598).
 
 ## About this repository
 
@@ -47,7 +47,7 @@ The Caravan dataset (and the corresponding manuscript) are currently under revis
 }
 ```
 
-Additionally, we would highly appreciated if you also cite the corresponding manuscripts of the source datasets. For details on the references, see the information included in the licenses folder of the [Caravan dataset](https://doi.org/10.5281/zenodo.6573527)
+Additionally, we would highly appreciated if you also cite the corresponding manuscripts of the source datasets. For details on the references, see the information included in the licenses folder of the [Caravan dataset](https://doi.org/10.5281/zenodo.6578598)
 
 ## Contact
 
