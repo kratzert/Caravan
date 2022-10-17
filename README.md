@@ -43,7 +43,7 @@ The Caravan dataset (and the corresponding manuscript) are currently under revis
   author={Kratzert, Frederik and Nearing, Grey and Addor, Nans and Erickson, Tyler and Gauch, Martin and Gilon, Oren and Gudmundsson, Lukas and Hassidim, Avinatan and Klotz, Daniel and Nevo, Sella and Shalev, Guy and Matias, Yossi},
   year={2022},
   publisher={EarthArxiv},
-  doi={https://doi.org/10.31223/X50S70}
+  doi={10.31223/X50S70}
 }
 ```
 
