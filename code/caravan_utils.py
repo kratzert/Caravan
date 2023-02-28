@@ -136,7 +136,6 @@ def split_by_basin_and_save(df: pd.DataFrame, basin: str, output_dir: Path, file
     xr_basin.to_netcdf(output_path)
 
 
-
 def stack_per_basin_netcdfs(basin_dir: Path):
     """Combines multiple netCDF files of a single basin into one object.
     
@@ -144,8 +143,7 @@ def stack_per_basin_netcdfs(basin_dir: Path):
     ----------
     basin_dir : Path
         Directory that contains individual netCDF files for one basin. All netCDF files in this directory are loaded
-        and concatenated in time and then saved in the same directory in a file called `combines.nc`. The individual
-        files are deleted afterwards to save disk space.
+        and concatenated in time and then saved in the same directory in a file called `combined.nc`.
     """
     xrs = []
     batch_files = list(basin_dir.glob('*.nc'))
@@ -159,14 +157,8 @@ def stack_per_basin_netcdfs(basin_dir: Path):
         xr = xarray.concat(xrs, dim="date")
         xr = xr.sortby('date', ascending=True)
         xr.to_netcdf(basin_dir / 'combined.nc')
-        flag = True
     else:
-        flag = False
-
-    # Remove the per-basin batch files to free disk space.
-    if flag:
-        for filepath in batch_files:
-            filepath.unlink()
+        raise ValueError(f"Could not find any .nc files in {basin_dir}")
 
 
 def aggregate_df_to_daily(df: pd.DataFrame,
@@ -241,6 +233,7 @@ def aggregate_df_to_daily(df: pd.DataFrame,
     aggregates.index = pd.to_datetime(aggregates.index, format="%Y-%m-%d")
     return aggregates
 
+
 def calculate_climate_indices(df: pd.DataFrame) -> Dict[str, float]:
     """Calculates various climate indices from ERA5-Land bands.
     
@@ -291,7 +284,7 @@ def calculate_climate_indices(df: pd.DataFrame) -> Dict[str, float]:
     # Seasonality (see Knoben)
     seasonality = monthly_moisture_index.max() - monthly_moisture_index.min()
 
-    high_prec_freq = len(df.loc[df["total_precipitation_sum"] >= 5*p_mean]) / len(df)
+    high_prec_freq = len(df.loc[df["total_precipitation_sum"] >= 5 * p_mean]) / len(df)
     low_prec_freq = len(df.loc[df["total_precipitation_sum"] < 1]) / len(df)
 
     precip = df["total_precipitation_sum"].values
@@ -299,10 +292,10 @@ def calculate_climate_indices(df: pd.DataFrame) -> Dict[str, float]:
     groups = _split_list(idx)
     low_precip_dur = np.mean(np.array([len(p) for p in groups]))
 
-    idx = np.where(precip >= 5*p_mean)[0]
+    idx = np.where(precip >= 5 * p_mean)[0]
     groups = _split_list(idx)
     high_prec_dur = np.mean(np.array([len(p) for p in groups]))
-    
+
     climate_indices = {
         'p_mean': p_mean,
         'pet_mean': pet_mean,
@@ -408,6 +401,7 @@ def era5l_unit_conversion(df: pd.DataFrame) -> pd.DataFrame:
 
     return df
 
+
 def get_metadata_info(xr: xarray.Dataset) -> Dict[str, str]:
     """Compile unit metadata depending on the included ERA5-Land features.
     
@@ -425,58 +419,59 @@ def get_metadata_info(xr: xarray.Dataset) -> Dict[str, str]:
     """
     # list of available features
     features = list(xr.variables)
-    
+
     metadata = {}
-    
+
     for feature in features:
-            
+
         if feature.startswith("temperature_2m"):
             metadata["temperature_2m"] = "2m air temperature [°C]"
 
         elif feature.startswith("potential_evaporation"):
             metadata["potential_evaporation"] = "ERA5-Land Potential Evapotranspiration [mm]"
-            
+
         elif feature.startswith("snow_depth_water_equivalent"):
             metadata["snow_depth_water_equivalent"] = "ERA5-Land Snow-Water-Equivalent [mm]"
 
         elif feature.startswith("surface_net_solar_radiation"):
             metadata["surface_net_solar_radiation"] = "Surface net solar radiation [W/m2]"
-            
+
         elif feature.startswith("surface_net_thermal_radiation"):
             metadata["surface_net_thermal_radiation"] = "Surface net thermal radiation [W/m2]"
 
         elif feature.startswith("surface_pressure"):
-            metadata["surface_pressure"] = "Surface pressure [kPa]"         
-            
+            metadata["surface_pressure"] = "Surface pressure [kPa]"
+
         elif feature.startswith("total_precipitation"):
-            metadata["total_precipitation"] = "Total precipitation [mm]"         
-            
+            metadata["total_precipitation"] = "Total precipitation [mm]"
+
         elif feature.startswith("potential_evaporation"):
-            metadata["potential_evaporation"] = "Potential evaporation [mm]"  
-            
+            metadata["potential_evaporation"] = "Potential evaporation [mm]"
+
         elif feature.startswith("u_component_of_wind_10m"):
             metadata["u_component_of_wind_10m"] = "U-component of wind at 10m [m/s]"
-        
+
         elif feature.startswith("v_component_of_wind_10m"):
             metadata["v_component_of_wind_10m"] = "V-component of wind at 10m [m/s]"
-            
+
         elif feature.startswith("volumetric_soil_water_layer_1"):
             metadata["volumetric_soil_water_layer_1"] = "ERA5-Land volumetric soil water layer 1 (0-7cm) [m3/m3]"
-        
+
         elif feature.startswith("volumetric_soil_water_layer_2"):
-            metadata["volumetric_soil_water_layer_2"] = "ERA5-Land volumetric soil water layer 2 (7-28cm) [m3/m3]" 
-            
+            metadata["volumetric_soil_water_layer_2"] = "ERA5-Land volumetric soil water layer 2 (7-28cm) [m3/m3]"
+
         elif feature.startswith("volumetric_soil_water_layer_3"):
-            metadata["volumetric_soil_water_layer_3"] = "ERA5-Land volumetric soil water layer 3 (28-100cm) [m3/m3]" 
-            
+            metadata["volumetric_soil_water_layer_3"] = "ERA5-Land volumetric soil water layer 3 (28-100cm) [m3/m3]"
+
         elif feature.startswith("volumetric_soil_water_layer_4"):
-            metadata["volumetric_soil_water_layer_4"] = "ERA5-Land volumetric soil water layer 4 (100-289cm) [m3/m3]"  
-            
+            metadata["volumetric_soil_water_layer_4"] = "ERA5-Land volumetric soil water layer 4 (100-289cm) [m3/m3]"
+
         elif feature.startswith("streamflow"):
-            metadata["streamflow"] = "Observed streamflow [mm/d]"  
-              
+            metadata["streamflow"] = "Observed streamflow [mm/d]"
+
     return metadata
-    
+
+
 def _get_offset(tz_name, lat):
     """Convert a time zone to offset from UTC in hours. """
     # Making sure it is always non-DST, depending on northern/southern hemisphere
@@ -488,6 +483,7 @@ def _get_offset(tz_name, lat):
     date_lst = tz_target.localize(some_date)
     date_utc = utc.localize(some_date)
     return (date_utc - date_lst).total_seconds() / (60 * 60)
+
 
 @njit
 def _split_list(a_list: List) -> List:
