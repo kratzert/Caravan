@@ -17,6 +17,11 @@ from numba import njit
 from timezonefinder import TimezoneFinder
 from tqdm.notebook import tqdm
 
+# Keep these dates. They are the original time period used to compute climate indices. Changing these dates would
+# remove the compareability between extensions, if longer ERA5-Land periods are downloaded.
+_CARAVAN_START_DATE = pd.to_datetime('1981-01-01', format="%Y-%m-%d")
+_CARAVAN_END_DATE = pd.to_datetime('2020-12-31', format="%Y-%m-%d")
+
 
 def process_earth_engine_outputs(csv_files: List[Path], basin_id_field: str, era5l_bands: List[str], output_dir: Path,
                                  num_workers: int) -> List[pd.DataFrame]:
@@ -253,6 +258,9 @@ def calculate_climate_indices(df: pd.DataFrame) -> Dict[str, float]:
     required_columns = ['total_precipitation_sum', 'potential_evaporation_sum', 'temperature_2m_mean']
     if any([x not in df.columns for x in required_columns]):
         raise RuntimeError(f"DataFrame is missing one of {required_columns} as column")
+
+    # Before computing any index, we make sure to slice to the original Caravan periods
+    df = df.loc[slice(_CARAVAN_START_DATE, _CARAVAN_END_DATE)]
 
     # Mean daily precip
     p_mean = df["total_precipitation_sum"].mean()
