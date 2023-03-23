@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thank you for contributing data to Caravan! Please fill out the following information so we can be sure your contribution is ready to be featured in the [list of community-contributed data](TODO). Once your dataset is accepted, a Caravan maintainer will add it to the list of datasets in the [Data Contributions discussion thread](TODO) and close this issue.
+        Thank you for contributing data to Caravan! Please fill out the following information so we can be sure your contribution is ready to be featured in the [list of community-contributed data](https://github.com/kratzert/Caravan/discussions/10). Once your dataset is accepted, a Caravan maintainer will add it to the list of datasets and close this issue.
   - type: input
     id: prefix
     attributes:
@@ -70,7 +70,7 @@ body:
       options:
         - label: I have uploaded my dataset on Zenodo, where it is accessible under the DOI provided above.
           required: false
-        - label: I used a basin prefix that is not yet used by any other Caravan sub-dataset (you can check this via the Data Contributions discussion thread (TODO link), where all accepted Caravan contributions are listed).
+        - label: I used a basin prefix that is not yet used by any other Caravan sub-dataset (you can check this via the [Data Contributions discussion thread](https://github.com/kratzert/Caravan/discussions/10), where all accepted Caravan contributions are listed).
           required: false
         - label: 'Permissive License: My data is available under a license that is compatible with the Caravan CC-BY-4.0 license (the easiest way to be sure about this is if your data uses CC-BY-4.0, too).'
           required: false
