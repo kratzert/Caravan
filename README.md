@@ -8,7 +8,7 @@ This repository is part of the Caravan project/dataset.
 
 _Caravan_ is an open community dataset of meteorological forcing data, catchment attributes, and discharge data for catchments around the world. Additionally, Caravan provides code to derive meteorological forcing data and catchment attributes in the cloud, making it easy for anyone to extend Caravan to new catchments. The vision of Caravan is to provide the foundation for a truly global open source community resource that will grow over time. 
 
-The Caravan dataset that was released together with the [paper](https://www.nature.com/articles/s41597-023-01975-w) and can be found [here](https://doi.org/10.5281/zenodo.7387919).
+The Caravan dataset that was released together with the [paper](https://www.nature.com/articles/s41597-023-01975-w) and can be found [here](https://doi.org/10.5281/zenodo.7920164).
 
 ## About this repository
 
@@ -38,16 +38,19 @@ The generated output is already in a folder structure that can be easily integra
 The Caravan dataset (and the corresponding manuscript) are currently under revisions. If you use the Caravan dataset in your research/work, the recommended citation is:
 
 ```bib
-@article{kratzert2022caravan,
-  title={Caravan - A global community dataset for large-sample hydrology},
-  author={Kratzert, Frederik and Nearing, Grey and Addor, Nans and Erickson, Tyler and Gauch, Martin and Gilon, Oren and Gudmundsson, Lukas and Hassidim, Avinatan and Klotz, Daniel and Nevo, Sella and Shalev, Guy and Matias, Yossi},
-  year={2022},
-  publisher={EarthArxiv},
-  doi={10.31223/X50S70}
+@article{kratzert2023caravan,
+  title={Caravan-A global community dataset for large-sample hydrology},
+  author={Kratzert, Frederik and Nearing, Grey and Addor, Nans and Erickson, Tyler and Gauch, Martin and Gilon, Oren and Gudmundsson, Lukas and Hassidim, Avinatan and Klotz, Daniel and Nevo, Sella and others},
+  journal={Scientific Data},
+  volume={10},
+  number={1},
+  pages={61},
+  year={2023},
+  publisher={Nature Publishing Group UK London}
 }
 ```
 
-Additionally, we would highly appreciated if you also cite the corresponding manuscripts of the source datasets. For details on the references, see the information included in the licenses folder of the [Caravan dataset](https://doi.org/10.5281/zenodo.7387919)
+Additionally, we would highly appreciated if you also cite the corresponding manuscripts of the source datasets. For details on the references, see the information included in the licenses folder of the [Caravan dataset](https://doi.org/10.5281/zenodo.7920164)
 
 ## Contact
 
