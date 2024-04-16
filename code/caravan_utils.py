@@ -298,11 +298,17 @@ def calculate_climate_indices(df: pd.DataFrame) -> Dict[str, float]:
     precip = df["total_precipitation_sum"].values
     idx = np.where(precip < 1)[0]
     groups = _split_list(idx)
-    low_precip_dur = np.mean(np.array([len(p) for p in groups]))
+    if groups:
+        low_precip_dur = np.mean(np.array([len(p) for p in groups]))
+    else:
+        low_precip_dur = 0.0
 
     idx = np.where(precip >= 5 * p_mean)[0]
     groups = _split_list(idx)
-    high_prec_dur = np.mean(np.array([len(p) for p in groups]))
+    if groups:
+        high_prec_dur = np.mean(np.array([len(p) for p in groups]))
+    else:
+        high_prec_dur = 0.0
 
     climate_indices = {
         'p_mean': p_mean,
