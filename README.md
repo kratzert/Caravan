@@ -10,6 +10,12 @@ _Caravan_ is an open community dataset of meteorological forcing data, catchment
 
 The Caravan dataset that was released together with the [paper](https://www.nature.com/articles/s41597-023-01975-w) and can be found [here](https://doi.org/10.5281/zenodo.10968468).
 
+## Caravan MultiMet
+
+We recently released the [Caravan MultiMet extension](https://arxiv.org/abs/2411.09459), which adds several weather products for all Caravan basins (including all basins from all extensions). The MultiMet extension contains several nowcast products (CPC, IMERG v07 Early, CHIRPS), as well as three different  forecast products (ECMWF IFS HRES, GraphCast, CHIRPS-GEFS) with multiple bands and 10 days (IFS, GraphCast) or 16 day (CHIRPS-GEFS) lead times. The data is saved in zarr files that can be downloaded from Zenodo and is also being hosted on public GCP bucket. For details check the paper [Caravan MultiMet extension](https://arxiv.org/abs/2411.09459) and the [notebook](examples/Caravan_MultiMet_Extending_Caravan_with_Multiple_Weather_Nowcasts_and_Forecasts.ipynb) that can be executed on Colab and examplifies how to work with the data from the GCP bucket.
+
+**Note**: In contrast to the original Caravan data, all data for all basins in the MultiMet extension is in UTC-0, which is the original timezone for all of these global weather products. Since not all are available in sub-daily resolution, and hence data can't be shifted easily to local time, we decided to keep all data for all basins in UTC-0. For that reason, the MultiMet extension also contains ERA5-Land reanalysis data and here, also in UTC-0. 
+
 ## About this repository
 
 The purpose of this repository is twofold:
@@ -18,7 +24,7 @@ The purpose of this repository is twofold:
     - that was used to derive all of the data included in Caravan, and 
     - that is required to extend Caravan to any new location for free in the cloud.
 2. It acts as a community hub (see [discussion forum](https://github.com/kratzert/caravan/discussions)) to
-    - share news and updates on Caravan ),
+    - share news and updates on Caravan,
     - for anyone to share extensions of Caravan to new regions.
 
 See ["Extend Caravan"](https://github.com/kratzert/Caravan/wiki/Extending-Caravan-with-new-basins) for a detailed description about how to extend Caravan to any new region/basin with the code provided in this repository. See ["How to contribute"](#how-to-contribute) for more details about how to contribute to the Caravan project.
