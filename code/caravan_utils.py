@@ -255,7 +255,12 @@ def calculate_climate_indices(df: pd.DataFrame) -> Dict[str, float]:
     Dict[str, float]
         Dictionary, where each key-value-pair is the name of one climate index and the corresponding value.
     """
-    required_columns = ['total_precipitation_sum', 'potential_evaporation_sum', 'temperature_2m_mean']
+    required_columns = [
+        'total_precipitation_sum',
+        'potential_evaporation_sum_ERA5_LAND',
+        'potential_evaporation_sum_FAO_PENMAN_MONTEITH',
+        'temperature_2m_mean',
+    ]
     if any([x not in df.columns for x in required_columns]):
         raise RuntimeError(f"DataFrame is missing one of {required_columns} as column")
 
@@ -265,32 +270,23 @@ def calculate_climate_indices(df: pd.DataFrame) -> Dict[str, float]:
     # Mean daily precip
     p_mean = df["total_precipitation_sum"].mean()
     # Mean daily PET
-    pet_mean = df["potential_evaporation_sum"].mean()
+    pet_mean_era5 = df["potential_evaporation_sum_ERA5_LAND"].mean()
+    pet_mean_fao = df["potential_evaporation_sum_FAO_PENMAN_MONTEITH"].mean()
 
     # Aridity index
-    aridity = pet_mean / p_mean
+    aridity_era5 = pet_mean_era5 / p_mean
+    aridity_fao = pet_mean_fao / p_mean
 
-    # Monthly means required for seasonality and fraction of snow
-    mean_monthly_temp = df["temperature_2m_mean"].groupby(df.index.month).mean()
-    mean_monthly_precip = df["total_precipitation_sum"].groupby(df.index.month).mean()
-    mean_monthly_pet = df["potential_evaporation_sum"].groupby(df.index.month).mean()
+    # Compute moistuer and seasonality index once with ERA5 PET and once with FAO PM PET
+    annual_moisture_index_era5, seasonality_era5 = _get_moisture_and_seasonality_index(
+        precipitation=df["total_precipitation_sum"], pet=df["potential_evaporation_sum_ERA5_LAND"])
+    annual_moisture_index_fao, seasonality_fao = _get_moisture_and_seasonality_index(
+        precipitation=df["total_precipitation_sum"], pet=df["potential_evaporation_sum_FAO_PENMAN_MONTEITH"])
 
     # Fraction of mean monthly precipipitation falling as snow (see Knoben)
+    mean_monthly_precip = df["total_precipitation_sum"].groupby(df.index.month).mean()
+    mean_monthly_temp = df["temperature_2m_mean"].groupby(df.index.month).mean()
     frac_snow = mean_monthly_precip.loc[mean_monthly_temp < 0].sum() / mean_monthly_precip.sum()
-
-    # Average annual moisture index (see Knoben)
-    p_gt_et = 1 - mean_monthly_pet.loc[mean_monthly_precip > mean_monthly_pet] / mean_monthly_precip.loc[
-        mean_monthly_precip > mean_monthly_pet]
-    srs = pd.Series(np.zeros((12), dtype=np.float32), index=mean_monthly_pet.index, name='dummy')
-    p_eq_et = srs.loc[mean_monthly_precip == mean_monthly_pet]
-    p_lt_et = mean_monthly_precip.loc[mean_monthly_precip < mean_monthly_pet] / mean_monthly_pet.loc[
-        mean_monthly_precip < mean_monthly_pet] - 1
-    monthly_moisture_index = pd.concat([p_gt_et, p_eq_et, p_lt_et])
-
-    annual_moisture_index = monthly_moisture_index.mean()
-
-    # Seasonality (see Knoben)
-    seasonality = monthly_moisture_index.max() - monthly_moisture_index.min()
 
     high_prec_freq = len(df.loc[df["total_precipitation_sum"] >= 5 * p_mean]) / len(df)
     low_prec_freq = len(df.loc[df["total_precipitation_sum"] < 1]) / len(df)
@@ -312,11 +308,15 @@ def calculate_climate_indices(df: pd.DataFrame) -> Dict[str, float]:
 
     climate_indices = {
         'p_mean': p_mean,
-        'pet_mean': pet_mean,
-        'aridity': aridity,
+        'pet_mean_ERA5_LAND': pet_mean_era5,
+        'pet_mean_FAO_PM': pet_mean_fao,
+        'aridity_ERA5': aridity_era5,
+        'aridity_FAO_PM': aridity_fao,
         'frac_snow': frac_snow,
-        'moisture_index': annual_moisture_index,
-        'seasonality': seasonality,
+        'moisture_index_ERA5_LAND': annual_moisture_index_era5,
+        'seasonality_ERA5_LAND': seasonality_era5,
+        'moisture_index_FAO_PM': annual_moisture_index_fao,
+        'seasonality_FAO_PM': seasonality_fao,
         'high_prec_freq': high_prec_freq,
         'high_prec_dur': high_prec_dur,
         'low_prec_freq': low_prec_freq,
@@ -324,6 +324,28 @@ def calculate_climate_indices(df: pd.DataFrame) -> Dict[str, float]:
     }
 
     return climate_indices
+
+
+def _get_moisture_and_seasonality_index(precipitation, pet) -> tuple[float, float]:
+
+    mean_monthly_precip = precipitation.groupby(precipitation.index.month).mean()
+    mean_monthly_pet = pet.groupby(pet.index.month).mean()
+
+    # Average annual moisture index (see Knoben)
+    p_gt_et = 1 - mean_monthly_pet.loc[mean_monthly_precip > mean_monthly_pet] / mean_monthly_precip.loc[
+        mean_monthly_precip > mean_monthly_pet]
+    srs = pd.Series(np.zeros((12), dtype=np.float32), index=mean_monthly_pet.index, name='dummy')
+    p_eq_et = srs.loc[mean_monthly_precip == mean_monthly_pet]
+    p_lt_et = mean_monthly_precip.loc[mean_monthly_precip < mean_monthly_pet] / mean_monthly_pet.loc[
+        mean_monthly_precip < mean_monthly_pet] - 1
+    monthly_moisture_index = pd.concat([p_gt_et, p_eq_et, p_lt_et])
+
+    annual_moisture_index = monthly_moisture_index.mean()
+
+    # Seasonality (see Knoben)
+    seasonality = monthly_moisture_index.max() - monthly_moisture_index.min()
+
+    return annual_moisture_index, seasonality
 
 
 def disaggregate_features(df: pd.DataFrame) -> pd.DataFrame:
@@ -441,9 +463,6 @@ def get_metadata_info(xr: xarray.Dataset) -> Dict[str, str]:
         if feature.startswith("temperature_2m"):
             metadata["temperature_2m"] = "2m air temperature [°C]"
 
-        elif feature.startswith("potential_evaporation"):
-            metadata["potential_evaporation"] = "ERA5-Land Potential Evapotranspiration [mm]"
-
         elif feature.startswith("snow_depth_water_equivalent"):
             metadata["snow_depth_water_equivalent"] = "ERA5-Land Snow-Water-Equivalent [mm]"
 
@@ -459,8 +478,13 @@ def get_metadata_info(xr: xarray.Dataset) -> Dict[str, str]:
         elif feature.startswith("total_precipitation"):
             metadata["total_precipitation"] = "Total precipitation [mm]"
 
-        elif feature.startswith("potential_evaporation"):
-            metadata["potential_evaporation"] = "Potential evaporation [mm]"
+        elif feature.startswith("potential_evaporation_sum_ERA5"):
+            metadata[
+                "potential_evaporation_sum_ERA5_LAND"] = "Potential Evaporation [mm] (original potential_evaporation from ERA5-Land)"
+
+        elif feature.startswith("potential_evaporation_sum_FAO"):
+            metadata[
+                "potential_evaporation_sum_FAO_PENMAN_MONTEITH"] = "Potential Evaporation [mm] (FAO Penman-Monteith computed from ERA5-Land inputs)"
 
         elif feature.startswith("u_component_of_wind_10m"):
             metadata["u_component_of_wind_10m"] = "U-component of wind at 10m [m/s]"
@@ -521,5 +545,5 @@ def _utc_to_local_standard_time(df: pd.DataFrame, lat, lon) -> pd.DataFrame:
     tz_name = tf.timezone_at(lat=lat, lng=lon)
     offset = _get_offset(tz_name, lat)
 
-    df.index = df.index + pd.to_timedelta(offset, unit='H')
+    df.index = df.index + pd.to_timedelta(offset, unit='h')
     return df
