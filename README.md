@@ -10,6 +10,13 @@ _Caravan_ is an open community dataset of meteorological forcing data, catchment
 
 The Caravan dataset that was released together with the [paper](https://www.nature.com/articles/s41597-023-01975-w) and can be found [here](https://doi.org/10.5281/zenodo.10968468).
 
+> [!IMPORTANT]
+> The current Caravan version is v1.5 in which we added Penman-Monteith PET, given the known issues with the potential_evaporation band from ERA5-Land. We also added PET related climate indices derived with the new Penman-Monteith band. For consistency, the old ERA5-Land potential evaporation band and the old climate indices were kept but renamed. 
+
+> [!TIP]
+> Join the [Caravan Google Groups](https://groups.google.com/g/caravan-dataset) to get email notifications for version updates and other important announcement around the Caravan community dataset.
+
+
 ## Caravan MultiMet
 
 We recently released the [Caravan MultiMet extension](https://arxiv.org/abs/2411.09459), which adds several weather products for all Caravan basins (including all basins from all extensions). The MultiMet extension contains several nowcast products (CPC, IMERG v07 Early, CHIRPS), as well as three different  forecast products (ECMWF IFS HRES, GraphCast, CHIRPS-GEFS) with multiple bands and 10 days (IFS, GraphCast) or 16 day (CHIRPS-GEFS) lead times. The data is saved in zarr files that can be downloaded from Zenodo and is also being hosted on public GCP bucket. For details check the paper [Caravan MultiMet extension](https://arxiv.org/abs/2411.09459) and the [notebook](examples/Caravan_MultiMet_Extending_Caravan_with_Multiple_Weather_Nowcasts_and_Forecasts.ipynb) that can be executed on Colab and examplifies how to work with the data from the GCP bucket.

@@ -1,4 +1,4 @@
-name: caravan
+name: caravan_3_11
 channels:
   - defaults
 dependencies:
@@ -7,7 +7,7 @@ dependencies:
   - numba
   - pandas
   - pip
-  - python=3.7
+  - python=3.11
   - tqdm
   - xarray
   - pip:
