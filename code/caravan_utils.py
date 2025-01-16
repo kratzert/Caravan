@@ -310,7 +310,7 @@ def calculate_climate_indices(df: pd.DataFrame) -> Dict[str, float]:
         'p_mean': p_mean,
         'pet_mean_ERA5_LAND': pet_mean_era5,
         'pet_mean_FAO_PM': pet_mean_fao,
-        'aridity_ERA5': aridity_era5,
+        'aridity_ERA5_LAND': aridity_era5,
         'aridity_FAO_PM': aridity_fao,
         'frac_snow': frac_snow,
         'moisture_index_ERA5_LAND': annual_moisture_index_era5,
