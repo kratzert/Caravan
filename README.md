@@ -8,7 +8,7 @@ This repository is part of the Caravan project/dataset.
 
 _Caravan_ is an open community dataset of meteorological forcing data, catchment attributes, and discharge data for catchments around the world. Additionally, Caravan provides code to derive meteorological forcing data and catchment attributes in the cloud, making it easy for anyone to extend Caravan to new catchments. The vision of Caravan is to provide the foundation for a truly global open source community resource that will grow over time. 
 
-The Caravan dataset that was released together with the [paper](https://www.nature.com/articles/s41597-023-01975-w) and can be found [here](https://doi.org/10.5281/zenodo.10968468).
+The Caravan dataset that was released together with the [paper](https://www.nature.com/articles/s41597-023-01975-w) and can be found [here](https://doi.org/10.5281/zenodo.14673536).
 
 > [!IMPORTANT]
 > The current Caravan version is v1.5 in which we added Penman-Monteith PET, given the known issues with the potential_evaporation band from ERA5-Land. We also added PET related climate indices derived with the new Penman-Monteith band. For consistency, the old ERA5-Land potential evaporation band and the old climate indices were kept but renamed. 
