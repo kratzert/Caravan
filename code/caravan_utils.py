@@ -23,8 +23,12 @@ _CARAVAN_START_DATE = pd.to_datetime('1981-01-01', format="%Y-%m-%d")
 _CARAVAN_END_DATE = pd.to_datetime('2020-12-31', format="%Y-%m-%d")
 
 
-def process_earth_engine_outputs(csv_files: List[Path], basin_id_field: str, era5l_bands: List[str], output_dir: Path,
-                                 num_workers: int) -> List[pd.DataFrame]:
+def process_earth_engine_outputs(csv_files: List[Path],
+                                 basin_id_field: str,
+                                 era5l_bands: List[str],
+                                 output_dir: Path,
+                                 num_workers: int,
+                                 basin_prefix: str | None = None) -> List[pd.DataFrame]:
     """Processes Earth Engine output files in parallel into per-basin netCDF files.
     
     Parameters
@@ -42,6 +46,8 @@ def process_earth_engine_outputs(csv_files: List[Path], basin_id_field: str, era
     num_workers : int
         Number of parallel workers. Usually this should be a value lower than the maximum number of cores available on 
         your system.
+    basin_prefix : str | None
+        String prefix that is prepended to the gauge ids in the basin_id_field in the following format {prefix}_{id}.
     """
 
     # Split Earth Engine outputs into per-basin netCDF files.
@@ -51,7 +57,8 @@ def process_earth_engine_outputs(csv_files: List[Path], basin_id_field: str, era
                 partial(_process_single_file,
                         basin_id_field=basin_id_field,
                         era5l_bands=era5l_bands,
-                        output_dir=output_dir), csv_files),
+                        output_dir=output_dir,
+                        basin_prefix=basin_prefix), csv_files),
                  total=len(csv_files),
                  desc="Splitting Earth Engine output into per-basin files."))
 
@@ -66,9 +73,13 @@ def process_earth_engine_outputs(csv_files: List[Path], basin_id_field: str, era
                  desc="Combining files per-basin into one file."))
 
 
-def _process_single_file(csv_file: Path, basin_id_field: str, era5l_bands: List[str], output_dir: Path):
+def _process_single_file(csv_file: Path, basin_id_field: str, era5l_bands: List[str], output_dir: Path,
+                         basin_prefix: str | None):
     # Load all data of one csv file into memory.
-    df = load_and_clean_csv_file(csv_file=csv_file, basin_id_field=basin_id_field, era5l_bands=era5l_bands)
+    df = load_and_clean_csv_file(csv_file=csv_file,
+                                 basin_id_field=basin_id_field,
+                                 era5l_bands=era5l_bands,
+                                 basin_prefix=basin_prefix)
 
     # Get unique list of basin ids. The field is renamed in the function above to gauge_id.
     basins = list(set(df["gauge_id"].to_list()))
@@ -81,7 +92,8 @@ def _process_single_file(csv_file: Path, basin_id_field: str, era5l_bands: List[
             print(csv_file, basin)
 
 
-def load_and_clean_csv_file(csv_file: Path, basin_id_field: str, era5l_bands: List[str]) -> pd.DataFrame:
+def load_and_clean_csv_file(csv_file: Path, basin_id_field: str, era5l_bands: List[str],
+                            basin_prefix: str | None) -> pd.DataFrame:
     """Load raw Earth Engine outputs and convert into time indexed DataFrame.
     
     Parameters
@@ -93,6 +105,8 @@ def load_and_clean_csv_file(csv_file: Path, basin_id_field: str, era5l_bands: Li
         used to derive the spatially averaged forcing data.
     era5l_bands : List[str]
         Name of ERA5-Land bands that should be processed.
+    basin_prefix : str
+        String prefix that is prepended to the gauge ids in the basin_id_field in the following format {prefix}_{id}.
 
     Returns
     -------
@@ -103,6 +117,9 @@ def load_and_clean_csv_file(csv_file: Path, basin_id_field: str, era5l_bands: Li
     df = pd.read_csv(csv_file, dtype={basin_id_field: str})
     # Unify the naming of the basin id column
     df = df.rename(columns={basin_id_field: "gauge_id"})
+
+    if basin_prefix is not None and basin_prefix:
+        df["gauge_id"] = df["gauge_id"].map(lambda x: f"{basin_prefix}_{x}")
 
     # Create datetime column
     df["date_str"] = df["system:index"].map(lambda x: x[:11].replace('T', '_'))
