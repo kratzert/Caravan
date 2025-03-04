@@ -48,7 +48,7 @@ The generated output is already in a folder structure that can be easily integra
 
 ## Reference
 
-The Caravan dataset (and the corresponding manuscript) are currently under revisions. If you use the Caravan dataset in your research/work, the recommended citation is:
+If you use the Caravan dataset in your research/work, the recommended citation is:
 
 ```bib
 @article{kratzert2023caravan,
@@ -63,7 +63,7 @@ The Caravan dataset (and the corresponding manuscript) are currently under revis
 }
 ```
 
-Additionally, we would highly appreciated if you also cite the corresponding manuscripts of the source datasets. For details on the references, see the information included in the licenses folder of the [Caravan dataset](https://doi.org/10.5281/zenodo.10968468)
+Additionally, we would greatly appreciate it if you also cite the corresponding manuscripts of the source datasets. A .bib file containing all relevant references is available in the [references folder](https://github.com/kratzert/Caravan/tree/main/references) for easy import into citation managers. For further details on the references and their licenses, see the information in the licenses folder of the [Caravan dataset](https://doi.org/10.5281/zenodo.10968468)
 
 ## Contact
 
