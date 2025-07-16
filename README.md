@@ -8,7 +8,7 @@ This repository is part of the Caravan project/dataset.
 
 _Caravan_ is an open community dataset of meteorological forcing data, catchment attributes, and discharge data for catchments around the world. Additionally, Caravan provides code to derive meteorological forcing data and catchment attributes in the cloud, making it easy for anyone to extend Caravan to new catchments. The vision of Caravan is to provide the foundation for a truly global open source community resource that will grow over time. 
 
-The Caravan dataset that was released together with the [paper](https://www.nature.com/articles/s41597-023-01975-w). Since Version 1.6, the dataset is published in two different Zenodo repositories, depending on the filetype of the timeseries data. Click [here](https://zenodo.org/records/14673536) for the netCDF version and [here](https://zenodo.org/records/15530021) for the CSV version.
+The Caravan dataset that was released together with the [paper](https://www.nature.com/articles/s41597-023-01975-w). Since Version 1.6, the dataset is published in two different Zenodo repositories, depending on the filetype of the timeseries data. Click [here](https://doi.org/10.5281/zenodo.6522634) for the netCDF version and [here](https://zenodo.org/records/15530021) for the CSV version.
 
 > [!TIP]
 > Join the [Caravan Google Groups](https://groups.google.com/g/caravan-dataset) to get email notifications for version updates and other important announcement around the Caravan community dataset.
