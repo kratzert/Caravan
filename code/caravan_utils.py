@@ -256,7 +256,9 @@ def aggregate_df_to_daily(df: pd.DataFrame,
     return aggregates
 
 
-def calculate_climate_indices(df: pd.DataFrame) -> Dict[str, float]:
+def calculate_climate_indices(df: pd.DataFrame,
+                              period_start_date: pd.Timestamp = _CARAVAN_START_DATE,
+                              period_end_date: pd.Timestamp = _CARAVAN_END_DATE) -> Dict[str, float]:
     """Calculates various climate indices from ERA5-Land bands.
     
     See Caravan publication for details.
@@ -266,6 +268,14 @@ def calculate_climate_indices(df: pd.DataFrame) -> Dict[str, float]:
     df : pd.DataFrame
         Timeindexed DataFrame in daily resolution. Must contain the columns 'total_precipitation_sum', 
         'potential_evaporation_sum' and 'temperature_2m_mean'.
+    period_start_date : pd.Timestamp
+        Can be used to define a different start date of the timeseries that should be considered for 
+        computing the climate indices. Note, if you plan to release a Caravan extension, please use
+        the default start date, i.e. don't pass a period_start_date to this function.
+    period_end_date : pd.Timestamp
+        Can be used to define a different end date of the timeseries that should be considered for 
+        computing the climate indices. Note, if you plan to release a Caravan extension, please use
+        the default end date, i.e. don't pass a period_end_date to this function.
 
     Returns
     -------
@@ -282,7 +292,7 @@ def calculate_climate_indices(df: pd.DataFrame) -> Dict[str, float]:
         raise RuntimeError(f"DataFrame is missing one of {required_columns} as column")
 
     # Before computing any index, we make sure to slice to the original Caravan periods
-    df = df.loc[slice(_CARAVAN_START_DATE, _CARAVAN_END_DATE)]
+    df = df.loc[slice(period_start_date, period_end_date)]
 
     # Mean daily precip
     p_mean = df["total_precipitation_sum"].mean()
